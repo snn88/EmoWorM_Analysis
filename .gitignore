@@ -1,0 +1,23 @@
+# ignore .fif files
+# file format for mne analysis
+*.fif
+
+# ignore .png files
+# generated images
+*.png
+
+# ignore .html files
+# generated html
+*.html
+
+# ignore .npy files
+# saved numpy data
+*.npy
+
+# ignore .path files
+# a text file that defines the path
+*.path
+
+# ignore .swp files
+# temporary vim files
+*.swp
