@@ -33,7 +33,8 @@ class raw_eeg:
         self.participant_id = participant_id
         self.bdf_fname = data_dir + '/RAWEEG/%d_EmoWorM.bdf' % participant_id
 
-    def plot_event_channel(self, show=False, save=True, figsize=(20, 10)):
+    def plot_event_channel(self, show=False, save=True, plot_breaks=False,
+                           figsize=(20, 10)):
         # read the raw bdf
         raw = mne.io.read_raw_edf(self.bdf_fname, preload=False,
                                   stim_channel='Status')
@@ -53,6 +54,11 @@ class raw_eeg:
         ax.plot(xlim, [16384, 16384], 'r-')
         ax.plot(xlim, [32768, 32768], 'r-')
 
+        if plot_breaks:
+            ylim = ax.get_ylim()
+            breaks = self._get_breaks()
+            for b in breaks[1:]:
+                ax.plot([b, b], ylim, 'g-')
         if save:
             # save the figure
             png_fname = self.bdf_fname.replace('.bdf', '.png')
@@ -60,11 +66,13 @@ class raw_eeg:
         if show:
             # display the figure
             plt.show()
+        else:
+            # close the figure
+            plt.close(fig)
 
     def crop_file(self):
-        # read the break file
-        breaks = np.genfromtxt(code_dir + '/bdf_breaks.txt', delimiter=',')
-        breaks, = breaks[breaks[:, 0] == self.participant_id, :]
+        # get the breaks
+        breaks = self._get_breaks()
         # read the bdf_file
         raw = mne.io.read_raw_edf(self.bdf_fname, preload=True,
                                   stim_channel='Status')
@@ -94,6 +102,11 @@ class raw_eeg:
             # save the data
             this_raw.save(fname, proj=False, overwrite=True)
 
+    def _get_breaks(self):
+        # read the break file
+        breaks = np.genfromtxt(code_dir + '/bdf_breaks.txt', delimiter=',')
+        breaks, = breaks[breaks[:, 0] == self.participant_id, :]
+        return breaks
 
 if __name__ == "__main__":
     # make sure that the path exists

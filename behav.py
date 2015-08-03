@@ -4,7 +4,7 @@ from scipy import stats
 import matplotlib.pyplot as plt
 
 # define the participants
-pids = range(1001, 1038)
+pids = range(1001, 1039)
 n_pid = len(pids)
 
 # define the genders
@@ -15,7 +15,7 @@ genders = np.array(['M', 'F', 'F', 'F', 'F',
                     'F', 'F', 'F', 'M', 'M',
                     'F', 'F', 'F', 'M', 'F',
                     'F', 'M', 'F', 'M', 'F',
-                    'M', 'M'])
+                    'M', 'M', 'M'])
 
 # define the column names
 col_names = ['date', 'pid', 'block_number', 'block_type', 'trial_number',
