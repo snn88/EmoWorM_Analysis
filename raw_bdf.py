@@ -20,7 +20,8 @@ data_dir = fid.read().rstrip('\n')
 fid.close()
 
 
-class raw_eeg:
+class raw_bdf:
+
     """Class to handle the raw eeg data
 
     Parameters
@@ -110,5 +111,5 @@ class raw_eeg:
 
 if __name__ == "__main__":
     # make sure that the path exists
-    this_eeg = raw_eeg(1001)
+    this_eeg = raw_bdf(1001)
     assert path.exists(this_eeg.bdf_fname)
