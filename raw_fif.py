@@ -41,10 +41,16 @@ class raw_fif:
                                     (participant_id, condition, block_number)
 
     def _read_fif(self):
-        # read the raw fif
-        raw = mne.io.read_raw_fif(self.raw_fname, preload=True, proj=False,
-                                  add_eeg_ref=False)
-        return raw
+        # check to see if data has already been read
+        if hasattr(self, 'raw'):
+            return self.raw
+        else:
+            # read the raw fif
+            raw = mne.io.read_raw_fif(self.raw_fname, preload=True, proj=False,
+                                      add_eeg_ref=False)
+            # store is attribute
+            self.raw = raw
+            return raw
 
     def plot_event_channel(self, show=False, save=True,
                            figsize=(20, 10)):
@@ -95,6 +101,20 @@ class raw_fif:
         raw._data[bad_ix] = raw._data[new_ix]
         # save the data
         raw.save(self.raw_fname, overwrite=True)
+
+    def filter_data(self, l_freq, h_freq):
+        # read the fif file
+        raw = self._read_fif()
+        # filter the data
+        raw.filter(l_freq=l_freq, h_freq=h_freq, method='iir')
+        # generate a new filename
+        new_fname = self.raw_fname.replace('/RAWFIF/', '/FILTFIF/')
+        new_fname = new_fname.replace('-raw.fif', '_%s:%sHz-raw.fif' %
+                                      (l_freq, h_freq))
+        # save the filtered data
+        raw.save(new_fname, overwrite=True)
+        # store the filtered filename
+        self.filter_fname = new_fname
 
 if __name__ == "__main__":
     # make sure that the path exists
