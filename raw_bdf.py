@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 '''
-Raw eeg data files are approximately 1 GB each and contain data from all
+Raw bdf data files are approximately 1 GB each and contain data from all
 4 blocks (PV0, WM0, PV1, WM1)
 They have the following format ...
     %4d_EmoWorM.bdf % participant_number
